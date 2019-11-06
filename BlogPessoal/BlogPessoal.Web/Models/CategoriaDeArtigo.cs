@@ -17,5 +17,8 @@ namespace BlogPessoal.Web.Models
         [StringLength(300, MinimumLength=10)]
         public string Descricao { get; set; }
 
+        public virtual ICollection<Artigo> Artigos { get; set; }
+
+
     }
 }

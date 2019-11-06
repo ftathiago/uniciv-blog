@@ -20,6 +20,9 @@
         <th>
             Descrição
         </th>
+        <th>
+            Opções
+        </th>
     </tr>
     @foreach(var item in Model)
     {
@@ -29,6 +32,10 @@
             </td>
             <td>
                 @item.Descricao
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) | 
+                @Html.ActionLink("Apagar", "Delete", new { id = item.Id })
             </td>
         </tr>
     }

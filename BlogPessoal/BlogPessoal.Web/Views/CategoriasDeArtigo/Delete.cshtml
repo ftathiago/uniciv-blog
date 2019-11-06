@@ -1,0 +1,36 @@
+﻿@using BlogPessoal.Web.Models
+
+@model CategoriaDeArtigo
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Tem certeza que deseja apagar?</h3>
+<div>
+    <h4>Categoria de artigo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+    </dl>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn bnt-default" />
+        @Html.ActionLink("Voltar para a lista", "Index");
+    </div>
+}

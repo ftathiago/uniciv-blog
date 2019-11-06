@@ -11,107 +11,116 @@ using BlogPessoal.Web.Models;
 
 namespace BlogPessoal.Web.Controllers
 {
-    public class AutoresController : Controller
+    public class ArtigosController : Controller
     {
         private BlogPessoalContexto db = new BlogPessoalContexto();
 
-        // GET: Autores
+        // GET: Artigos
         public ActionResult Index()
         {
-            return View(db.Autores.ToList());
+            var artigos = db.Artigos.Include(a => a.Autor).Include(a => a.CategoriaDeArtigo);
+            return View(artigos.ToList());
         }
 
-        // GET: Autores/Details/5
+        // GET: Artigos/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Autor autor = db.Autores.Find(id);
-            if (autor == null)
+            Artigo artigo = db.Artigos.Find(id);
+            if (artigo == null)
             {
                 return HttpNotFound();
             }
-            return View(autor);
+            return View(artigo);
         }
 
-        // GET: Autores/Create
+        // GET: Artigos/Create
         public ActionResult Create()
         {
+            ViewBag.AutorId = new SelectList(db.Autores, "Id", "Nome");
+            ViewBag.CategoriaDeArtigoId = new SelectList(db.CategoriasDeArtigo, "Id", "Nome");
             return View();
         }
 
-        // POST: Autores/Create
+        // POST: Artigos/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nome,Email,Senha,Administrador,DataCadastro")] Autor autor)
+        public ActionResult Create([Bind(Include = "Id,Titulo,Conteudo,DataPublicacao,CategoriaDeArtigoId,AutorId,Removido")] Artigo artigo)
         {
             if (ModelState.IsValid)
             {
-                db.Autores.Add(autor);
+                db.Artigos.Add(artigo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(autor);
+            ViewBag.AutorId = new SelectList(db.Autores, "Id", "Nome", artigo.AutorId);
+            ViewBag.CategoriaDeArtigoId = new SelectList(db.CategoriasDeArtigo, "Id", "Nome", artigo.CategoriaDeArtigoId);
+            return View(artigo);
         }
 
-        // GET: Autores/Edit/5
+        // GET: Artigos/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Autor autor = db.Autores.Find(id);
-            if (autor == null)
+            Artigo artigo = db.Artigos.Find(id);
+            if (artigo == null)
             {
                 return HttpNotFound();
             }
-            return View(autor);
+            ViewBag.AutorId = new SelectList(db.Autores, "Id", "Nome", artigo.AutorId);
+            ViewBag.CategoriaDeArtigoId = new SelectList(db.CategoriasDeArtigo, "Id", "Nome", artigo.CategoriaDeArtigoId);
+            return View(artigo);
         }
 
-        // POST: Autores/Edit/5
+        // POST: Artigos/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nome,Email,Senha,Administrador,DataCadastro")] Autor autor)
+        public ActionResult Edit([Bind(Include = "Id,Titulo,Conteudo,DataPublicacao,CategoriaDeArtigoId,AutorId,Removido")] Artigo artigo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(autor).State = EntityState.Modified;
+                db.Entry(artigo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(autor);
+            ViewBag.AutorId = new SelectList(db.Autores, "Id", "Nome", artigo.AutorId);
+            ViewBag.CategoriaDeArtigoId = new SelectList(db.CategoriasDeArtigo, "Id", "Nome", artigo.CategoriaDeArtigoId);
+            return View(artigo);
         }
 
-        // GET: Autores/Delete/5
+        // GET: Artigos/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Autor autor = db.Autores.Find(id);
-            if (autor == null)
+            Artigo artigo = db.Artigos.Find(id);
+            if (artigo == null)
             {
                 return HttpNotFound();
             }
-            return View(autor);
+            return View(artigo);
         }
 
-        // POST: Autores/Delete/5
+        // POST: Artigos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Autor autor = db.Autores.Find(id);
-            db.Autores.Remove(autor);
+            Artigo artigo = db.Artigos.Find(id);
+            db.Artigos.Remove(artigo);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
